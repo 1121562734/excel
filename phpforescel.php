@@ -1,10 +1,11 @@
 <?php
-	include 'D:\phpStudy\WWW\test\PHPExcel\PHPExcel.php';
-	date_default_timezone_set('America/Los_Angeles');
+	include 'PHPExcel.php';
+	date_default_timezone_set('Asia/Shanghai');
 
 	class fill_template {
 		var $startrow = 0;
 		function __construct($fn) {
+			$fn = iconv('utf-8', 'GB2312//IGNORE', $fn);
 			$this->tpl = PHPExcel_IOFactory::load($fn);
 			$this->target = clone $this->tpl;
 		}
@@ -16,26 +17,27 @@
 			$maxColumns = $sheet->getHighestColumn();
 			//获取最大列
 			$maxColumns = PHPExcel_Cell::columnIndexFromString($maxColumns);
-			$i = 0;
 			for($iR = 2; $iR <= $maxRows; $iR++){
 				//内循环获取对应的单元格信息
 				//使用函数 : getCellByColumnAndRow(列索引 从0开始, 行索引 从0开始)
 				for($iC = 0; $iC < $maxColumns; $iC++){
 					$txt = $sheet->getCellByColumnAndRow($iC, $iR)->getValue();
-					if(preg_match('/{(.+)}/e',$txt ,$match)){
+					if(preg_match('/\${(.+)}/e',$txt ,$match)){
 						//获取ar的值
+						//$vo=iconv('utf-8', 'GB2312//IGNORE', $ar[$match[1]]);
 						$vo=$ar[$match[1]];
-						 $this->target->getActiveSheet()->getCellByColumnAndRow($iC, $iR)->setValue($vo);
+						$this->target->getActiveSheet()->getCellByColumnAndRow($iC, $iR)->setValue($vo);
 					}
 				}
 			}
 		}
 		function output($fn) {
+			$fn = iconv('utf-8', 'GB2312//IGNORE', $fn);
 			$t = PHPExcel_IOFactory::createWriter($this->target, 'Excel5');
 			$t->save($fn);
 		}
 	}
 
-	$p = new fill_template('test.xls');
-	$p->add_data(array('name'=>'cpj','age'=>'qw3'));
-	$p->output('xxx.xls');
+	$p = new fill_template('GPS安装单1.xls');
+	$p->add_data(array('name'=>'陈鹏杰','age'=>'年龄'));
+	$p->output('GPS安装单2.xls');
