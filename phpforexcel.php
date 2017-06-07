@@ -1,4 +1,7 @@
 <?php
+	/**
+	 * 存在的单元格跟样式会被改变
+	 */
 	include 'PHPExcel.php';
 	date_default_timezone_set('Asia/Shanghai');
 
@@ -38,6 +41,9 @@
 		}
 	}
 
-	$p = new fill_template('GPS安装单1.xls');
+	$p = new fill_template('表单/长安贷款履约保证保险投保单.xls');
 	$p->add_data(array('name'=>'陈鹏杰','age'=>'年龄'));
-	$p->output('GPS安装单2.xls');
+	$p->output('苏宁/长安贷款履约保证保险投保单2.xls');
+
+
+
